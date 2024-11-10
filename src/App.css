@@ -1,0 +1,15 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.trackLocation{
+    display: flex;
+    gap: 20px;
+}
+.weather-type{
+    display: flex;
+    align-items: center;
+
+}

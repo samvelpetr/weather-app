@@ -52,13 +52,13 @@ const UserLocation: React.FC =  () => {
     
 
   return (
-    <div>
+    <div className='trackLocation'>
       <button type='button' onClick={getLocation}>Detect My City</button>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       {city ? (
-        <button>{city}</button>
+        <button type='button'>{city}</button>
       ) : (
         <p>Location not available</p>
       )}

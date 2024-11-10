@@ -42,7 +42,7 @@ const SearchBar:React.FC = () => {
     }
 
     return <>
-        <form onSubmit={handleSubmit}>
+        <form className="navbar" onSubmit={handleSubmit}>
 
             <input type="text"
             onChange={(evn) => setInputCity(evn.target.value)}
