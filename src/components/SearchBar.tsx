@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { getCityWeather } from '../api/weatherApi';
 import { CityContext } from '../context/context';
-import { ICity, ICod } from '../models/types';
+import { ICity } from '../models/types';
 import UserLocation from './TrackLocation';
 import { useNavigate } from 'react-router-dom';
 import { getCityData } from '../utils/cityData';
