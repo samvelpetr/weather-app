@@ -43,11 +43,12 @@ export const getCityWeather = async (cityName:string) => {
         
     } catch(err) {
         console.log(err);
+        return err;
     }
         
     
 }
-export const getCity = async (lat:number,lon:number):Promise<string> => {
+export const getCity = async (lat:number,lon:number) => {
     try{
 
         const cityInfo = await axios.get(wheatherUrl,{
@@ -57,9 +58,9 @@ export const getCity = async (lat:number,lon:number):Promise<string> => {
                 appid:apiKey,
             }
         });
-        return cityInfo.data.name as string;
+        return cityInfo.data;
     } catch(err) {
         console.log(err); 
-        return err as string;
+        return err;
     }
 }
