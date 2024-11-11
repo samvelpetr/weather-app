@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ICity, ICod, Location } from '../models/types';
 import { getCity } from '../api/weatherApi';
 import { CityContext } from '../context/context';
+import { useNavigate } from 'react-router-dom';
 
 const UserLocation: React.FC = () => {
+  const navigate = useNavigate();
   const [location, setLocation] = useState<Location>({
     latitude: null,
     longitude: null,
@@ -23,6 +25,7 @@ const UserLocation: React.FC = () => {
   const { changeCity } = context;
   const changeShowingCity = (obj: ICity) => {
     changeCity(obj);
+    navigate(`/${userCity?.name}`);
   };
   const getLocation = () => {
     if (userCity?.name) {

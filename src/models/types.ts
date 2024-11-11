@@ -23,9 +23,21 @@ export interface IWeatherType{
 
 export interface CityContextType {
     city?: ICity 
-    changeCity: (city: ICity) => void
+    changeCity: (city: ICity) => void,
+    favorites: string[],
+    addToFavorites: (cityName:string) => void
+    removeFromFavorites: (cityName:string) => void
 }
 export interface Location {
     latitude: number | null;
     longitude: number | null;
-  }
+}
+
+
+export interface ICityForecastItem {
+    id:number,
+    date:string,
+    temp:number,
+    weather:IWeatherType,
+    windSpeed:number
+}

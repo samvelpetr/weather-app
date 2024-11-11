@@ -1,15 +1,406 @@
+/* Navbar container styling */
 .navbar {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-.trackLocation{
+    justify-content: space-between;
+    background-color: #0073e6;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Input styling */
+  .navbar input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    margin-right: 10px;
+    width: 200px;
+  }
+  
+  /* Submit and Detect Location buttons */
+  .navbar button[type="submit"],
+  .navbar .trackLocation button {
+    padding: 8px 12px;
+    background-color: #004a99;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-right: 10px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .navbar button[type="submit"]:hover,
+  .navbar .trackLocation button:hover {
+    background-color: #003366;
+  }
+  
+  /* User city button */
+  .navbar .trackLocation button:last-of-type {
+    background-color: #009933;
+    margin-top: 5px;
+  }
+  
+  .navbar .trackLocation button:last-of-type:hover {
+    background-color: #007a29;
+  }
+  
+  /* Track location section styling */
+  .trackLocation {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 20px;
+  }
+  
+  /* Error message styling */
+  .trackLocation p {
+    margin: 5px 0;
+    font-size: 0.9em;
+  }
+  
+  .trackLocation p[style="color: red;"] {
+    color: #ff3333;
+    font-weight: bold;
+  }
+  
+  /* General button spacing */
+  .navbar button {
+    margin: 5px;
+  }
+  
+  /* Placeholder styling */
+  .navbar input::placeholder {
+    color: #888;
+    font-style: italic;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .navbar input[type="text"],
+    .navbar button,
+    .favorites-link {
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+  
+/* General container styling */
+.container {
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
-}
-.weather-type{
+    padding: 20px;
+    justify-content: center;
+  }
+  
+  /* Forecast item container */
+  .forecast-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 200px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  
+  .forecast-item:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Forecast date */
+  .forecast-item h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+  
+  /* Weather details */
+  .forecast-item p {
+    margin: 8px 0;
+    font-size: 0.95em;
+    color: #555;
+  }
+  
+  /* Bold important information */
+  .forecast-item p span {
+    font-weight: bold;
+  }
+  
+  /* Weather type */
+  .forecast-item .weather-type {
     display: flex;
     align-items: center;
-
+    justify-content: center;
+  }
+  
+  /* Weather icon */
+  .forecast-item .weather-type img {
+    margin-left: 5px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Divider between time entries */
+  .forecast-item .time-entry {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .forecast-item .time-entry:last-child {
+    border-bottom: none;
+  }
+  /* Container for the weather card */
+.weather-card {
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* City title */
+  .weather-card h1 {
+    font-size: 1.8em;
+    margin: 0;
+    color: #333;
+  }
+  
+  /* Left side styling */
+  .weather-card .left-side {
+    margin-top: 15px;
+  }
+  
+  /* Temperature */
+  .weather-card .left-side h3 {
+    font-size: 2.2em;
+    color: #ff8c00;
+    margin: 0;
+  }
+  
+  .weather-card .left-side h4 {
+    font-size: 1em;
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  /* Sunrise and Sunset */
+  .weather-card .left-side p {
+    font-size: 0.9em;
+    color: #555;
+    margin: 8px 0;
+  }
+  
+  /* Weather type with icon */
+  .weather-card .weather-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Styling for the weather icon */
+  .weather-card .weather-type img {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    padding: 5px; /* Add padding to create space around the icon */
+    background-color: #333; /* Dark background for contrast */
+    border-radius: 50%; /* Make it circular */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Optional shadow for a lift effect */
+  }
+  
+  /* Wind speed and Humidity */
+  .weather-card .left-side p span {
+    font-weight: bold;
+  }
+  
+  /* Additional info */
+  .weather-card .left-side p {
+    margin: 8px 0;
+  }
+  
+  .forecast-temp span {
+    color: #ff8c00;
 }
+.favorites-link {
+    margin-left: 20px;
+    padding: 8px 12px;
+    background-color: #f7931e;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+  }
+  
+  .favorites-link:hover {
+    background-color: #d9750d;
+  }
+  /* Main container for favorite cities */
+.favorite-cities {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  /* Each city item container */
+  .favorite-city-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* City link styling */
+  .favorite-city-item a {
+    text-decoration: none;
+    color: #0073e6;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: color 0.2s ease;
+  }
+  
+  .favorite-city-item a:hover {
+    color: #004a99;
+  }
+  
+  /* Remove button styling */
+  .favorite-city-item button {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+  }
+  
+  .favorite-city-item button:hover {
+    background-color: #cc0000;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .favorite-cities {
+      max-width: 100%;
+      padding: 15px;
+    }
+  
+    .favorite-city-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .favorite-city-item a,
+    .favorite-city-item button {
+      width: 100%;
+      text-align: center;
+      margin-top: 5px;
+    }
+  }
+  /* Container for the favorite and forecast actions */
+.favorite-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  
+  /* Add/Remove Favorites Button */
+  .favorite-actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  /* Add to Favorites Button styling */
+  .favorite-actions .add-to-favorites {
+    background-color: #4caf50; /* Green */
+    color: white;
+  }
+  
+  .favorite-actions .add-to-favorites:hover {
+    background-color: #388e3c; /* Darker green */
+    transform: scale(1.05);
+  }
+  
+  /* Remove from Favorites Button styling */
+  .favorite-actions .remove-from-favorites {
+    background-color: #ff4d4f; /* Red */
+    color: white;
+  }
+  
+  .favorite-actions .remove-from-favorites:hover {
+    background-color: #cc0000; /* Darker red */
+    transform: scale(1.05);
+  }
+  
+  /* Forecast Link */
+  .favorite-actions .forecast-link {
+    color: #0073e6;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid #0073e6;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .favorite-actions .forecast-link:hover {
+    background-color: #0073e6;
+    color: white;
+  }
+  
+  /* Styling for the empty favorites message */
+.empty-favorites {
+    text-align: center;
+    color: #888; /* Muted color */
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  

@@ -3,10 +3,14 @@ import { getCityWeather } from '../api/weatherApi';
 import { CityContext } from '../context/context';
 import { ICity, ICod } from '../models/types';
 import UserLocation from './TrackLocation';
+import { useNavigate } from 'react-router-dom';
+import { getCityData } from '../utils/cityData';
+import { Link } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
   const [inputCity, setInputCity] = useState<string>('');
   const cityContext = useContext(CityContext);
+  const navigate = useNavigate();
 
   if (!cityContext) {
     throw new Error('CityContext must be used within a CityProvider');
@@ -25,28 +29,11 @@ const SearchBar: React.FC = () => {
       alert('Input is empty');
       return;
     }
-    const data = await getCityWeather(inputCity);
-    if (data.status == 404) {
-      alert('Invalid city name');
-      return;
+    const cityData = await getCityData(inputCity);
+    if (cityData) {
+      changeCity(cityData as ICity);
+      navigate(`/${cityData.name}`);
     }
-    const cityData: ICity = {
-      id: data.id as number,
-      name: data.name as string,
-      wind: data.wind.speed as number,
-      temp: data.main.temp as number,
-      feelTemp: data.main.feels_like as number,
-      pressure: data.main.pressure as number,
-      humidity: data.main.humidity as number,
-      sunrise: data.sys.sunrise as number,
-      sunset: data.sys.sunset as number,
-      coord: data.coord as ICod,
-      weatherType: {
-        main: data.weather[0].main as string,
-        icon: data.weather[0].icon as string,
-      },
-    };
-    changeCity(cityData);
   };
 
   return (
@@ -60,6 +47,9 @@ const SearchBar: React.FC = () => {
         />
         <button type="submit">Search</button>
         <UserLocation />
+        <Link to="/favorites" className="favorites-link">
+          Favorites
+        </Link>
       </form>
     </>
   );
