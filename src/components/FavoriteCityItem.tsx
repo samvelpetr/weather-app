@@ -1,19 +1,26 @@
 import { useContext } from 'react';
-import { CityContext } from '../context/context';
 import { Link } from 'react-router-dom';
+import { FavoriteContext } from '../context/favoriteContext';
+import { createUseStyles } from 'react-jss';
+import styles from '../styles';
 
 interface IProps {
   cityData: string;
 }
 
+const useStyles = createUseStyles(styles);
+
 const FavoriteCityItem: React.FC<IProps> = ({ cityData }) => {
-  const context = useContext(CityContext);
-  if (!context) {
-    throw new Error('CityContext must be used within a CityProvider');
+  const favoriteContext = useContext(FavoriteContext);
+  const classes = useStyles();
+
+  if (!favoriteContext) {
+    throw new Error('context must be initialized');
   }
-  const { removeFromFavorites } = context;
+  const { removeFromFavorites } = favoriteContext;
+
   return (
-    <div className="favorite-city-item">
+    <div className={classes.favoriteCityItem}>
       <Link to={'/' + cityData}>{cityData}</Link>
       <button onClick={() => removeFromFavorites(cityData)}>
         Remove from Favorites

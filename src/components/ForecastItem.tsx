@@ -1,21 +1,27 @@
+import { createUseStyles } from 'react-jss';
 import { imageUrl, imageUrlEnd } from '../api/apiInfo';
 import { ICityForecastItem } from '../models/types';
+import styles from '../styles';
 
 interface IProps {
   items: ICityForecastItem[];
 }
 
+const useStyles = createUseStyles(styles);
+
 const ForecastItem: React.FC<IProps> = ({ items }) => {
+  const classes = useStyles();
+
   return (
-    <div className="forecast-item">
+    <div className={classes.forecastItem}>
       <h3>{items[0].date.substring(5, 10)}</h3>
       {items.map((elm) => (
-        <div key={elm.id} className="time-entry">
+        <div key={elm.id} className={classes.timeEntry}>
           <p>
             <span>Time:</span> {elm.date.substring(11, 16)}
           </p>
-          <p className="forecast-temp">
-            <span>Temp:</span> {elm.temp}°C
+          <p>
+            <span className={classes.forecastTemp}>Temp:</span> {elm.temp}°C
           </p>
           <p>
             <span>Wind:</span> {elm.windSpeed} meter/sec

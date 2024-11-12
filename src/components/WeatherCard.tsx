@@ -1,17 +1,28 @@
 import { useContext, useEffect } from 'react';
-import { CityContext } from '../context/context';
+import { CityContext } from '../context/cityContext';
 import { imageUrl, imageUrlEnd } from '../api/apiInfo';
 import { Link, useParams } from 'react-router-dom';
 import { getCityData } from '../utils/cityData';
+import { FavoriteContext } from '../context/favoriteContext';
+import { createUseStyles } from 'react-jss';
+import styles from '../styles';
 
+const useStyles = createUseStyles(styles);
 const WeatherCard: React.FC = () => {
   const { cityName } = useParams<{ cityName: string }>();
   const context = useContext(CityContext);
+  const classes = useStyles();
+
+  const favoriteContext = useContext(FavoriteContext);
   if (!context) {
-    throw new Error('CityContext must be used within a CityProvider');
+    throw new Error('context must be initialized');
   }
-  const { city, changeCity, addToFavorites, favorites, removeFromFavorites } =
-    context;
+  if (!favoriteContext) {
+    throw new Error('context must be initialized');
+  }
+  const { favorites, addToFavorites, removeFromFavorites } = favoriteContext;
+  const { city, changeCity } = context;
+
   useEffect(() => {
     if (cityName != city?.name) {
       getCityData(cityName as string).then((resp) => {
@@ -20,14 +31,14 @@ const WeatherCard: React.FC = () => {
         }
       });
     }
-  }, []);
+  }, [cityName]);
 
   return (
     <>
-      <div className="weather-card">
+      <div className={classes.weatherCard}>
         <h1>{city?.name}</h1>
 
-        <div className="card">
+        <div>
           <div className="left-side">
             <h3>{city?.temp}°C</h3>
             <h4>Feels like: {city?.feelTemp}°C</h4>
@@ -52,17 +63,17 @@ const WeatherCard: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="favorite-actions">
+      <div className={classes.favoriteActions}>
         {favorites.includes(city?.name as string) ? (
           <button
-            className="remove-from-favorites"
+            className={classes.removeFromFavorites}
             onClick={() => removeFromFavorites(city?.name as string)}
           >
             Remove from Favorites
           </button>
         ) : (
           <button
-            className="add-to-favorites"
+            className={classes.addToFavorites}
             onClick={() => addToFavorites(city?.name as string)}
           >
             Add to Favorites

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { CityContext } from '../context/context';
+import { CityContext } from '../context/cityContext';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { apiKey } from '../api/apiInfo';

@@ -1,21 +1,27 @@
-import { useContext } from 'react';
-import { CityContext } from '../context/context';
+import { memo, useContext } from 'react';
 import FavoriteCityItem from './FavoriteCityItem';
+import { FavoriteContext } from '../context/favoriteContext';
+import { createUseStyles } from 'react-jss';
+import styles from '../styles';
 
-const FavoriteCities: React.FC = () => {
-  const context = useContext(CityContext);
+const useStyles = createUseStyles(styles);
+
+const FavoriteCities: React.FC = memo(() => {
+  const context = useContext(FavoriteContext);
+  const classes = useStyles();
+
   if (!context) {
     throw new Error('CityContext must be used within a CityProvider');
   }
   const { favorites } = context;
   return (
-    <div className="favorite-cities">
+    <div className={classes.favoriteCities}>
       {favorites.length ? (
-        favorites.map((elm, i) => <FavoriteCityItem key={i} cityData={elm} />)
+        favorites.map((elm) => <FavoriteCityItem key={elm} cityData={elm} />)
       ) : (
-        <p className="empty-favorites">Favorites is empty...</p>
+        <p className={classes.emptyFavorites}>Favorites is empty...</p>
       )}
     </div>
   );
-};
+});
 export default FavoriteCities;

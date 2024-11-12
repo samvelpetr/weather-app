@@ -1,16 +1,21 @@
-import { useContext, useEffect, useState, useCallback } from 'react';
-import { CityContext } from '../context/context';
+import { useContext, useEffect, useState, useCallback, memo } from 'react';
+import { CityContext } from '../context/cityContext';
 import { ICity } from '../models/types';
 import UserLocation from './TrackLocation';
 import { useNavigate } from 'react-router-dom';
 import { getCityData } from '../utils/cityData';
 import { Link } from 'react-router-dom';
+import { createUseStyles } from 'react-jss';
+import styles from '../styles';
 
-const SearchBar: React.FC = () => {
+const useStyles = createUseStyles(styles);
+
+const SearchBar: React.FC = memo(() => {
   const [inputCity, setInputCity] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const cityContext = useContext(CityContext);
   const navigate = useNavigate();
+  const classes = useStyles();
 
   if (!cityContext) {
     throw new Error('CityContext must be used within a CityProvider');
@@ -54,7 +59,7 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <form className="navbar" onSubmit={handleSubmit}>
+    <form className={classes.navbar} onSubmit={handleSubmit}>
       <input
         type="text"
         onChange={handleChange}
@@ -62,13 +67,13 @@ const SearchBar: React.FC = () => {
         placeholder="Enter City name"
       />
       <button type="submit">Search</button>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {errorMessage && <p>{errorMessage}</p>}
       <UserLocation />
-      <Link to="/favorites" className="favorites-link">
+      <Link to="/favorites" className={classes.favoritesLink}>
         Favorites
       </Link>
     </form>
   );
-};
+});
 
 export default SearchBar;

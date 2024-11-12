@@ -1,10 +1,21 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  memo,
+} from 'react';
 import { ICity, Location } from '../models/types';
 import { getCity } from '../api/weatherApi';
-import { CityContext } from '../context/context';
-import { useNavigate } from 'react-router-dom';
+import { CityContext } from '../context/cityContext';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createUseStyles } from 'react-jss';
+import styles from '../styles';
 
-const UserLocation: React.FC = () => {
+const useStyles = createUseStyles(styles);
+
+const UserLocation: React.FC = memo(() => {
+  const { cityName } = useParams<{ cityName: string }>();
   const navigate = useNavigate();
   const [location, setLocation] = useState<Location>({
     latitude: null,
@@ -13,6 +24,7 @@ const UserLocation: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [userCity, setUserCity] = useState<ICity | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const classes = useStyles();
 
   const context = useContext(CityContext);
   if (!context) {
@@ -27,8 +39,10 @@ const UserLocation: React.FC = () => {
 
   const changeShowingCity = useCallback(
     (obj: ICity) => {
-      changeCity(obj);
-      navigate(`/${obj.name}`);
+      if (obj.name !== cityName) {
+        changeCity(obj);
+        navigate(`/${obj.name}`);
+      }
     },
     [changeCity, navigate]
   );
@@ -94,9 +108,9 @@ const UserLocation: React.FC = () => {
   }, [location.latitude, location.longitude]);
 
   return (
-    <div className="trackLocation">
+    <div className={classes.trackLocation}>
       {isLoading ? (
-        <div className="loading-spinner"></div>
+        <div className={classes.loadingSpinner}></div>
       ) : (
         <button type="button" onClick={getLocation}>
           Detect My City
@@ -106,7 +120,11 @@ const UserLocation: React.FC = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       {userCity?.name ? (
-        <button type="button" onClick={() => changeShowingCity(userCity)}>
+        <button
+          className={classes.greenButton}
+          type="button"
+          onClick={() => changeShowingCity(userCity)}
+        >
           {userCity.name}
         </button>
       ) : (
@@ -114,6 +132,6 @@ const UserLocation: React.FC = () => {
       )}
     </div>
   );
-};
+});
 
 export default UserLocation;

@@ -1,16 +1,19 @@
-import { useContext, useEffect, useState } from 'react';
-import { CityContext } from '../context/context';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { CityContext } from '../context/cityContext';
 import { getForecast } from '../api/weatherApi';
 import { ICityForecastItem } from '../models/types';
-import ForecastItem from './ForecastItem';
 import { useParams } from 'react-router-dom';
 import { getCityData } from '../utils/cityData';
+import { createUseStyles } from 'react-jss';
+import styles from '../styles';
+import ForecastItem from './ForecastItem';
 
+const useStyles = createUseStyles(styles);
 const Forecast: React.FC = () => {
   const { cityName } = useParams<{ cityName: string }>();
   const [cityInfo, setCityInfo] = useState<ICityForecastItem[] | null>(null);
-  const [chunks, setChunks] = useState<ICityForecastItem[][]>([]);
   const context = useContext(CityContext);
+  const classes = useStyles();
 
   if (!context) {
     throw new Error('CityContext must be used within a CityProvider');
@@ -29,6 +32,12 @@ const Forecast: React.FC = () => {
     return chunksArr;
   };
 
+  const chunks = useMemo(() => {
+    if (cityInfo) {
+      return chunkArray(cityInfo as ICityForecastItem[], 8);
+    }
+  }, [cityInfo]);
+
   useEffect(() => {
     const fetchCityData = async () => {
       try {
@@ -46,7 +55,7 @@ const Forecast: React.FC = () => {
     };
 
     fetchCityData();
-  }, [cityName, city, changeCity]);
+  }, [cityName]);
 
   useEffect(() => {
     const fetchForecastData = async () => {
@@ -73,27 +82,22 @@ const Forecast: React.FC = () => {
               };
             }
           );
+
           setCityInfo(formattedData);
         } catch (error) {
           console.error('Error fetching forecast data:', error);
         }
       }
     };
-
     fetchForecastData();
   }, [city]);
 
-  useEffect(() => {
-    if (cityInfo && cityInfo.length > 0) {
-      setChunks(chunkArray(cityInfo, 8));
-    }
-  }, [cityInfo]);
-
   return (
-    <div className="container">
-      {chunks.map((chunk, index) => (
-        <ForecastItem items={chunk} key={index} />
-      ))}
+    <div className={classes.container}>
+      {chunks &&
+        chunks.map((chunk, index) => (
+          <ForecastItem items={chunk} key={index} />
+        ))}
     </div>
   );
 };
