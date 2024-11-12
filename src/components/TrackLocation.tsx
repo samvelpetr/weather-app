@@ -12,21 +12,26 @@ const UserLocation: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [userCity, setUserCity] = useState<ICity | undefined>(undefined);
-  useEffect(() => {
-    let data = sessionStorage.getItem('UserCity') as string;
-    if (data) {
-      setUserCity(JSON.parse(data) as ICity);
-    }
-  }, []);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+
   const context = useContext(CityContext);
   if (!context) {
     throw new Error('CityContext must be used within a CityProvider');
   }
   const { changeCity } = context;
+
+  useEffect(() => {
+    const data = sessionStorage.getItem('UserCity');
+    if (data) {
+      setUserCity(JSON.parse(data) as ICity);
+    }
+  }, []);
+
   const changeShowingCity = (obj: ICity) => {
     changeCity(obj);
-    navigate(`/${userCity?.name}`);
+    navigate(`/${obj.name}`);
   };
+
   const getLocation = () => {
     if (userCity?.name) {
       return;
@@ -36,6 +41,8 @@ const UserLocation: React.FC = () => {
       return;
     }
 
+    setIsLoading(true); // Start loading
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLocation({
@@ -43,14 +50,17 @@ const UserLocation: React.FC = () => {
           longitude: position.coords.longitude,
         });
         setError(null);
+        setIsLoading(false); // Stop loading when location is retrieved
       },
       () => {
         setError(
           'Unable to retrieve location. Permission denied or unavailable.'
         );
+        setIsLoading(false); // Stop loading if there's an error
       }
     );
   };
+
   useEffect(() => {
     if (location.latitude && location.longitude) {
       const fetchCityName = async () => {
@@ -58,24 +68,24 @@ const UserLocation: React.FC = () => {
           location.latitude as number,
           location.longitude as number
         );
-        if (data.status == 404) {
+        if (data.status === 404) {
           alert('some error');
           return;
         }
         const cityData: ICity = {
-          id: data.id as number,
-          name: data.name as string,
-          wind: data.wind.speed as number,
-          temp: data.main.temp as number,
-          feelTemp: data.main.feels_like as number,
-          pressure: data.main.pressure as number,
-          humidity: data.main.humidity as number,
-          sunrise: data.sys.sunrise as number,
-          sunset: data.sys.sunset as number,
-          coord: data.coord as ICod,
+          id: data.id,
+          name: data.name,
+          wind: data.wind.speed,
+          temp: data.main.temp,
+          feelTemp: data.main.feels_like,
+          pressure: data.main.pressure,
+          humidity: data.main.humidity,
+          sunrise: data.sys.sunrise,
+          sunset: data.sys.sunset,
+          coord: data.coord,
           weatherType: {
-            main: data.weather[0].main as string,
-            icon: data.weather[0].icon as string,
+            main: data.weather[0].main,
+            icon: data.weather[0].icon,
           },
         };
         sessionStorage.setItem('UserCity', JSON.stringify(cityData));
@@ -87,17 +97,18 @@ const UserLocation: React.FC = () => {
 
   return (
     <div className="trackLocation">
-      <button type="button" onClick={getLocation}>
-        Detect My City
-      </button>
+      {isLoading ? (
+        <div className="loading-spinner">Loading...</div>
+      ) : (
+        <button type="button" onClick={getLocation}>
+          Detect My City
+        </button>
+      )}
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       {userCity?.name ? (
-        <button
-          type="button"
-          onClick={() => changeShowingCity(userCity as ICity)}
-        >
+        <button type="button" onClick={() => changeShowingCity(userCity)}>
           {userCity.name}
         </button>
       ) : (
