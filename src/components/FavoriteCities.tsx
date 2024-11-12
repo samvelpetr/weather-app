@@ -1,24 +1,17 @@
 import { useContext } from 'react';
 import { CityContext } from '../context/context';
-import { Link } from 'react-router-dom';
+import FavoriteCityItem from './FavoriteCityItem';
 
 const FavoriteCities: React.FC = () => {
   const context = useContext(CityContext);
   if (!context) {
     throw new Error('CityContext must be used within a CityProvider');
   }
-  const { favorites, removeFromFavorites } = context;
+  const { favorites } = context;
   return (
     <div className="favorite-cities">
       {favorites.length ? (
-        favorites.map((elm, i) => (
-          <div key={i} className="favorite-city-item">
-            <Link to={'/' + elm}>{elm}</Link>
-            <button onClick={() => removeFromFavorites(elm)}>
-              Remove from Favorites
-            </button>
-          </div>
-        ))
+        favorites.map((elm, i) => <FavoriteCityItem key={i} cityData={elm} />)
       ) : (
         <p className="empty-favorites">Favorites is empty...</p>
       )}

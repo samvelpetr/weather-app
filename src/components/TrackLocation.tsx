@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ICity, ICod, Location } from '../models/types';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { ICity, Location } from '../models/types';
 import { getCity } from '../api/weatherApi';
 import { CityContext } from '../context/context';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ const UserLocation: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [userCity, setUserCity] = useState<ICity | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const context = useContext(CityContext);
   if (!context) {
@@ -22,27 +22,25 @@ const UserLocation: React.FC = () => {
 
   useEffect(() => {
     const data = sessionStorage.getItem('UserCity');
-    if (data) {
-      setUserCity(JSON.parse(data) as ICity);
-    }
+    if (data) setUserCity(JSON.parse(data) as ICity);
   }, []);
 
-  const changeShowingCity = (obj: ICity) => {
-    changeCity(obj);
-    navigate(`/${obj.name}`);
-  };
+  const changeShowingCity = useCallback(
+    (obj: ICity) => {
+      changeCity(obj);
+      navigate(`/${obj.name}`);
+    },
+    [changeCity, navigate]
+  );
 
   const getLocation = () => {
-    if (userCity?.name) {
-      return;
-    }
+    if (userCity?.name) return;
     if (!navigator.geolocation) {
       setError('Geolocation is not supported by your browser');
       return;
     }
 
-    setIsLoading(true); // Start loading
-
+    setIsLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLocation({
@@ -50,13 +48,13 @@ const UserLocation: React.FC = () => {
           longitude: position.coords.longitude,
         });
         setError(null);
-        setIsLoading(false); // Stop loading when location is retrieved
+        setIsLoading(false);
       },
       () => {
         setError(
           'Unable to retrieve location. Permission denied or unavailable.'
         );
-        setIsLoading(false); // Stop loading if there's an error
+        setIsLoading(false);
       }
     );
   };
@@ -69,7 +67,7 @@ const UserLocation: React.FC = () => {
           location.longitude as number
         );
         if (data.status === 404) {
-          alert('some error');
+          setError('Location not found.');
           return;
         }
         const cityData: ICity = {
@@ -98,7 +96,7 @@ const UserLocation: React.FC = () => {
   return (
     <div className="trackLocation">
       {isLoading ? (
-        <div className="loading-spinner">Loading...</div>
+        <div className="loading-spinner"></div>
       ) : (
         <button type="button" onClick={getLocation}>
           Detect My City

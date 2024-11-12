@@ -6,7 +6,6 @@ export async function getCityData(
 ): Promise<ICity | undefined> {
   const data = await getCityWeather(inputCity);
   if (data.status == 404) {
-    alert('Invalid city name');
     return;
   }
   const cityData: ICity = {

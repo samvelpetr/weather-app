@@ -25,7 +25,6 @@ const WeatherMap: React.FC = () => {
         }
       });
     } else if (city?.coord) {
-      // Set coordinates only when `city` and `city.coord` are defined
       setCityCoordinates([city.coord.lat, city.coord.lon]);
     }
   }, [city, cityName]);
@@ -41,7 +40,7 @@ const WeatherMap: React.FC = () => {
       />
     </MapContainer>
   ) : (
-    <p>Loading map...</p> // Display a loading message until coordinates are available
+    <p>Loading map...</p>
   );
 };
 

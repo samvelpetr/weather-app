@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { CityContext } from '../context/context';
 import { ICity } from '../models/types';
 import UserLocation from './TrackLocation';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
   const [inputCity, setInputCity] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const cityContext = useContext(CityContext);
   const navigate = useNavigate();
 
@@ -16,41 +17,57 @@ const SearchBar: React.FC = () => {
   }
 
   const { city, changeCity } = cityContext;
+
   useEffect(() => {
     if (city?.name) {
       setInputCity(city.name);
     }
   }, [city]);
 
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInputCity(event.target.value);
+      setErrorMessage(null);
+    },
+    []
+  );
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputCity.length == 0) {
-      alert('Input is empty');
+    if (inputCity.trim().length === 0) {
+      setErrorMessage('Please enter a city name.');
       return;
     }
-    const cityData = await getCityData(inputCity);
-    if (cityData) {
-      changeCity(cityData as ICity);
-      navigate(`/${cityData.name}`);
+    try {
+      const cityData = await getCityData(inputCity);
+      if (cityData) {
+        changeCity(cityData as ICity);
+        navigate(`/${cityData.name}`);
+        setErrorMessage(null);
+      } else {
+        setErrorMessage('City not found. Please try another name.');
+      }
+    } catch (error) {
+      setErrorMessage('Failed to retrieve city data. Please try again.');
+      console.error(error);
     }
   };
 
   return (
-    <>
-      <form className="navbar" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          onChange={(evn) => setInputCity(evn.target.value)}
-          value={inputCity}
-          placeholder="Enter City name"
-        />
-        <button type="submit">Search</button>
-        <UserLocation />
-        <Link to="/favorites" className="favorites-link">
-          Favorites
-        </Link>
-      </form>
-    </>
+    <form className="navbar" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        onChange={handleChange}
+        value={inputCity}
+        placeholder="Enter City name"
+      />
+      <button type="submit">Search</button>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <UserLocation />
+      <Link to="/favorites" className="favorites-link">
+        Favorites
+      </Link>
+    </form>
   );
 };
 
