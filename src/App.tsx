@@ -51,21 +51,19 @@ function App() {
   }, []);
 
   return (
-    <>
-      <CityContext.Provider value={propsData}>
-        <FavoriteContext.Provider value={favoritePropsData}>
-          <SearchBar />
-          <Routes>
-            <Route>
-              <Route path="/:cityName" element={<WeatherCard />} />
-              <Route path="/:cityName/week" element={<Forecast />} />
-              <Route path="/:cityName/map" element={<WeatherMap />} />
-              <Route path="/favorites" element={<FavoriteCities />} />
-            </Route>
-          </Routes>
-        </FavoriteContext.Provider>
-      </CityContext.Provider>
-    </>
+    <CityContext.Provider value={propsData}>
+      <FavoriteContext.Provider value={favoritePropsData}>
+        <SearchBar />
+        <Routes>
+          <Route>
+            <Route path="/:cityName" element={<WeatherCard />} />
+            <Route path="/:cityName/week" element={<Forecast />} />
+            <Route path="/:cityName/map" element={<WeatherMap />} />
+            <Route path="/favorites" element={<FavoriteCities />} />
+          </Route>
+        </Routes>
+      </FavoriteContext.Provider>
+    </CityContext.Provider>
   );
 }
 
